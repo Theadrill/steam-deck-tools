@@ -1,4 +1,4 @@
-﻿using CommonHelpers;
+using CommonHelpers;
 using LibreHardwareMonitor.Hardware;
 using System.ComponentModel;
 
@@ -42,6 +42,13 @@ namespace FanControl
                                 MinRPM = 1500
                             }
                         },
+                        {
+                            FanMode.Custom, new FanSensor.Profile()
+                            {
+                                Type = FanSensor.Profile.ProfileType.Constant,
+                                MinRPM = 1500
+                            }
+                        },
                     }
                 }
             },
@@ -76,6 +83,14 @@ namespace FanControl
                                 A = 1.28f,
                                 B = Settings.Default.Silent4000RPMTemp - 28,
                                 C = 3000f
+                            }
+                        },
+                        {
+                            FanMode.Custom, new FanSensor.Profile()
+                            {
+                                Type = FanSensor.Profile.ProfileType.CustomCurve,
+                                MinRPM = 1500,
+                                MaxRPM = CommonHelpers.Vlv0100.MAX_FAN_RPM
                             }
                         },
                     }
@@ -115,6 +130,14 @@ namespace FanControl
                                 C = 3000f
                             }
                         },
+                        {
+                            FanMode.Custom, new FanSensor.Profile()
+                            {
+                                Type = FanSensor.Profile.ProfileType.CustomCurve,
+                                MinRPM = 1500,
+                                MaxRPM = CommonHelpers.Vlv0100.MAX_FAN_RPM
+                            }
+                        },
                     }
                 }
             },
@@ -152,6 +175,19 @@ namespace FanControl
                                 Ki = -20,
                                 Kd = 0
                             }
+                        },
+                        {
+                            FanMode.Custom, new FanSensor.Profile()
+                            {
+                                Type = FanSensor.Profile.ProfileType.Pid,
+                                MinInput = 30,
+                                MaxInput = 70,
+                                MaxRPM = 3000,
+                                PidSetPoint = 70,
+                                Kp = 0,
+                                Ki = -20,
+                                Kd = 0
+                            }
                         }
                     }
                 }
@@ -178,6 +214,17 @@ namespace FanControl
                         },
                         {
                             FanMode.Silent, new FanSensor.Profile()
+                            {
+                                // If battery goes over 40oC require 2kRPM
+                                Type = FanSensor.Profile.ProfileType.Constant,
+                                MinInput = 0,
+                                MaxInput = 40,
+                                MinRPM = 0,
+                                MaxRPM = 2000,
+                            }
+                        },
+                        {
+                            FanMode.Custom, new FanSensor.Profile()
                             {
                                 // If battery goes over 40oC require 2kRPM
                                 Type = FanSensor.Profile.ProfileType.Constant,

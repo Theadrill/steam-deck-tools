@@ -1,4 +1,4 @@
-﻿using CommonHelpers;
+using CommonHelpers;
 using LibreHardwareMonitor.Hardware;
 using System.ComponentModel;
 
@@ -33,7 +33,8 @@ namespace FanControl
                 Constant,
                 Quadratic,
                 Pid,
-                Exponential
+                Exponential,
+                CustomCurve
             }
 
             public ProfileType Type { get; set; }
@@ -60,6 +61,11 @@ namespace FanControl
 
             public ushort CalculateRPM(float input)
             {
+                if (Type == ProfileType.CustomCurve)
+                {
+                    return CustomCurveSettings.Default.CalculateRPM(input);
+                }
+
                 float rpm = 0;
 
                 switch (Type)

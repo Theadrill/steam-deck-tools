@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace CommonHelpers
 {
@@ -7,7 +7,8 @@ namespace CommonHelpers
         Default = 17374,
         Silent,
         SteamOS,
-        Max
+        Max,
+        Custom
     }
 
     public enum KernelDriversLoaded : uint

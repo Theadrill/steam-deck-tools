@@ -111,11 +111,26 @@ namespace CommonHelpers
 
         private string GetProfileString(string key, string defaultValue)
         {
-            StringBuilder sb = new StringBuilder(500);
+            StringBuilder sb = new StringBuilder(2048);
             uint res = GetPrivateProfileString(SettingsKey, key, defaultValue, sb, (uint)sb.Capacity, ConfigFile);
             if (res != 0)
                 return sb.ToString();
             return defaultValue;
+        }
+
+        public void ClearCache()
+        {
+            lock (this)
+            {
+                cachedValues.Clear();
+                try
+                {
+                    WritePrivateProfileString(null, null, null, ConfigFile);
+                }
+                catch
+                {
+                }
+            }
         }
 
         private bool SetProfileString(string key, string value)
@@ -165,8 +180,8 @@ namespace CommonHelpers
             }
         }
 
-        [DllImport("kernel32.dll")]
-        static extern bool WritePrivateProfileString(string lpAppName, string? lpKeyName, string? lpString, string lpFileName);
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+        static extern bool WritePrivateProfileString(string? lpAppName, string? lpKeyName, string? lpString, string lpFileName);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         static extern uint GetPrivateProfileString(string lpAppName, string lpKeyName, string lpDefault, StringBuilder lpReturnedString, uint nSize, string lpFileName);
