@@ -1,7 +1,7 @@
 # Plano de Feature: Limite de Carga de Bateria Persistente e Watchdog em Segundo Plano
 
 **Documento:** RFC / Especificação Técnica  
-**Status:** Em Execução (Passo 2 Concluído)  
+**Status:** Em Execução (Passo 3 Concluído)  
 **Autor:** Tech Lead / Pair Programming  
 **Data:** 20/09/2026  
 **Alvo:** `PowerControl` & `CommonHelpers` (Steam Deck Tools Fork)  
@@ -13,8 +13,8 @@
 | Passo | Descrição | Status | Commit Local |
 | :--- | :--- | :--- | :--- |
 | **Passo 1** | Compatibilidade de Hardware (`Vlv0100.cs`) | ✅ Concluído | `5e7290f` |
-| **Passo 2** | Modelo de Configuração (`Settings.cs`) | ✅ Concluído | (Registrado no git) |
-| **Passo 3** | Delegate `CurrentValue` e Persistência (`BatteryChargeLimit.cs`) | ⏳ Pendente | - |
+| **Passo 2** | Modelo de Configuração (`Settings.cs`) | ✅ Concluído | `07fa497` |
+| **Passo 3** | Delegate `CurrentValue` e Persistência (`BatteryChargeLimit.cs`) | ✅ Concluído | (Registrado no git) |
 | **Passo 4** | Watchdog (60s), Sleep/Wake & Correção OSD Toggle (`Controller.cs`) | ⏳ Pendente | - |
 | **Passo 5** | Compilação de Produção, Deploy e Release | ⏳ Pendente | - |
 
@@ -99,12 +99,13 @@ flowchart TD
   ```
 * *Implementado e testado com compilação bem-sucedida.*
 
-### Passo 3: Delegate `CurrentValue` e Persistência (`PowerControl/Options/BatteryChargeLimit.cs`)
+### Passo 3: Delegate `CurrentValue` e Persistência (`PowerControl/Options/BatteryChargeLimit.cs`) ✅ [CONCLUÍDO]
 * Implementar o delegate `CurrentValue` chamando `vlv0100.GetMaxBatteryCharge() + "%"`.
 * Configurar `ApplyValue` para:
   1. Escrever o valor selecionado no chip EC via `vlv0100.SetMaxBatteryCharge()`.
   2. Salvar o valor em `Settings.Default.BatteryChargeLimit`.
   3. Atualizar o arquivo `.ini` no disco.
+* *Implementado e testado com compilação bem-sucedida.*
 
 ### Passo 4: Watchdog de 60 Segundos e Evento Sleep/Wake (`PowerControl/Controller.cs`)
 * Instanciar `batteryWatchdogTimer` com `Interval = 60000` (60 segundos).
