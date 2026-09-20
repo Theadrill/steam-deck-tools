@@ -1,4 +1,4 @@
-﻿using CommonHelpers;
+using CommonHelpers;
 using ExternalHelpers;
 using hidapi;
 using Microsoft.Win32;
@@ -32,6 +32,7 @@ namespace PowerControl
         SDCInput neptuneDeviceState = new SDCInput();
         DateTime? neptuneDeviceNextKey;
         System.Windows.Forms.Timer neptuneTimer;
+        System.Windows.Forms.Timer? batteryWatchdogTimer;
 
         ProfilesController? profilesController;
 
@@ -250,6 +251,14 @@ namespace PowerControl
 
             wasInternalDisplayConnected = ExternalHelpers.DisplayConfig.IsInternalConnected.GetValueOrDefault(false);
             SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+
+            CheckAndEnforceBatteryChargeLimit();
+
+            batteryWatchdogTimer = new System.Windows.Forms.Timer(components);
+            batteryWatchdogTimer.Interval = 60000;
+            batteryWatchdogTimer.Tick += delegate { CheckAndEnforceBatteryChargeLimit(); };
+            batteryWatchdogTimer.Enabled = true;
         }
 
         private void OsdTimer_Tick(object? sender, EventArgs e)
@@ -348,7 +357,8 @@ namespace PowerControl
             {
                 // schedule next repeat far in the future
                 dismissNeptuneInput();
-                hideOSD();
+                if (!isOSDToggled)
+                    hideOSD();
                 return;
             }
 
@@ -443,6 +453,8 @@ namespace PowerControl
 
         public void Dispose()
         {
+            SystemEvents.PowerModeChanged -= SystemEvents_PowerModeChanged;
+            batteryWatchdogTimer?.Stop();
             using (profilesController) { }
             components.Dispose();
             osdClose();
@@ -461,6 +473,51 @@ namespace PowerControl
             }
             catch (SystemException)
             {
+            }
+        }
+
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            if (e.Mode == PowerModes.Resume)
+            {
+                Log.TraceLine("SystemEvents_PowerModeChanged: Resume detected, enforcing battery charge limit...");
+                CheckAndEnforceBatteryChargeLimit();
+            }
+        }
+
+        private void CheckAndEnforceBatteryChargeLimit()
+        {
+            var settingStr = Settings.Default.BatteryChargeLimit;
+            if (string.IsNullOrEmpty(settingStr))
+                return;
+
+            if (!int.TryParse(settingStr.TrimEnd('%'), out int targetLimit))
+                return;
+
+            if (targetLimit < 70 || targetLimit > 100)
+                return;
+
+            try
+            {
+                using (var vlv0100 = new Vlv0100())
+                {
+                    if (!vlv0100.Open())
+                        return;
+
+                    if (vlv0100.SupportedDevice?.MaxBatteryCharge != true)
+                        return;
+
+                    var currentLimit = vlv0100.GetMaxBatteryCharge();
+                    if (currentLimit != targetLimit)
+                    {
+                        vlv0100.SetMaxBatteryCharge(targetLimit);
+                        Log.TraceLine("BatteryWatchdog: Reapplied limit {0}% (was {1}%)", targetLimit, currentLimit);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.TraceException("BatteryWatchdog", "CheckAndEnforceBatteryChargeLimit", e);
             }
         }
 

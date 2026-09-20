@@ -107,7 +107,7 @@ flowchart TD
   3. Atualizar o arquivo `.ini` no disco.
 * *Implementado e testado com compilação bem-sucedida.*
 
-### Passo 4: Watchdog de 60 Segundos e Evento Sleep/Wake (`PowerControl/Controller.cs`)
+### Passo 4: Watchdog de 60 Segundos e Evento Sleep/Wake (`PowerControl/Controller.cs`) ✅ [CONCLUÍDO]
 * Instanciar `batteryWatchdogTimer` com `Interval = 60000` (60 segundos).
 * No evento `Tick` do timer:
   * Ler o valor atual de `vlv0100.GetMaxBatteryCharge()`.
@@ -116,8 +116,9 @@ flowchart TD
 * Registrar `SystemEvents.PowerModeChanged`:
   * Ao receber `PowerModes.Resume`, invocar imediatamente a checagem e reaplicação.
 * Na inicialização (`Controller` constructor), aplicar o limite salvo no `.ini` imediatamente.
+* *Implementado e testado com compilação bem-sucedida.*
 
-### Passo 5: Correção do Conflito do OSD Toggle (`PowerControl/Controller.cs`)
+### Passo 5: Correção do Conflito do OSD Toggle (`PowerControl/Controller.cs`) ✅ [CONCLUÍDO]
 * Na rotina `NeptuneTimer_Tick`, ajustar a linha de fechamento automático:
   ```csharp
   // Antes:
@@ -138,6 +139,12 @@ flowchart TD
   }
   ```
   Isso garante que atalhos como `Ctrl + I` (ou botões traseiros) mantenham o OSD aberto sem sumir.
+* *Implementado e testado com compilação bem-sucedida.*
+
+### Passo 6: Build de Produção, Deploy e Testes Locais ⏳ [EM ANDAMENTO]
+* Executar build com flag de release e versão atualizada.
+* Substituir os binários em `C:\Program Files\SteamDeckTools\`.
+* Reiniciar o serviço/aplicativo `PowerControl` e verificar o funcionamento no OSD e registro EC.
 
 ---
 
