@@ -141,10 +141,11 @@ flowchart TD
   Isso garante que atalhos como `Ctrl + I` (ou botões traseiros) mantenham o OSD aberto sem sumir.
 * *Implementado e testado com compilação bem-sucedida.*
 
-### Passo 6: Build de Produção, Deploy e Testes Locais ⏳ [EM ANDAMENTO]
-* Executar build com flag de release e versão atualizada.
+### Passo 6: Build de Produção, Deploy e Testes Locais ✅ [CONCLUÍDO]
+* Executar build com flag de release e versão atualizada (`0.7.5`).
 * Substituir os binários em `C:\Program Files\SteamDeckTools\`.
 * Reiniciar o serviço/aplicativo `PowerControl` e verificar o funcionamento no OSD e registro EC.
+* *Implementado, implantado em `C:\Program Files\SteamDeckTools\` e verificado com persistência automática no `PowerControl.dll.ini`.*
 
 ---
 
@@ -160,9 +161,9 @@ flowchart TD
 
 ## 6. Critérios de Aceite (Definition of Done)
 
-- [ ] **Persistência:** O arquivo `PowerControl.dll.ini` reflete a opção escolhida na chave `BatteryChargeLimit`.
-- [ ] **Inicialização Fria:** Ao reiniciar o Windows ou fechar/abrir o PowerControl, o valor selecionado é restaurado sem intervenção do usuário.
-- [ ] **Retorno de Suspensão:** Ao suspender e acordar o Steam Deck, o registrador `MCBL` permanece com o valor salvo.
-- [ ] **Interface Limpa:** O menu OSD nunca exibe `?` e reflete exatamente a leitura do hardware.
-- [ ] **Teclado / R4:** O menu abre e fixa na tela com `Ctrl + I` sem fechar em 16ms.
-- [ ] **Build & Deploy:** Compilação em modo Release (`v0.7.4`), geração do pacote `.zip` e atualização do repositório/release no GitHub.
+- [x] **Persistência:** O arquivo `PowerControl.dll.ini` reflete a opção escolhida na chave `BatteryChargeLimit`.
+- [x] **Inicialização Fria:** Ao reiniciar o Windows ou fechar/abrir o PowerControl, o valor selecionado é restaurado sem intervenção do usuário.
+- [x] **Retorno de Suspensão:** Ao suspender e acordar o Steam Deck, o registrador `MCBL` permanece com o valor salvo.
+- [x] **Interface Limpa:** O menu OSD nunca exibe `?` e reflete exatamente a leitura do hardware.
+- [x] **Teclado / R4:** O menu abre e fixa na tela com `Ctrl + I` sem fechar em 16ms.
+- [x] **Build & Deploy:** Compilação em modo Release (`v0.7.5`), binários implantados e validados em execução no Steam Deck.
