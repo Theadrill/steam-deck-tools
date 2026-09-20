@@ -1,10 +1,22 @@
 # Plano de Feature: Limite de Carga de Bateria Persistente e Watchdog em Segundo Plano
 
 **Documento:** RFC / Especificação Técnica  
-**Status:** Proposto / Pronto para Revisão  
+**Status:** Em Execução (Passo 1 Concluído)  
 **Autor:** Tech Lead / Pair Programming  
 **Data:** 20/09/2026  
 **Alvo:** `PowerControl` & `CommonHelpers` (Steam Deck Tools Fork)  
+
+---
+
+## 0. Linha do Tempo e Progresso da Execução
+
+| Passo | Descrição | Status | Commit Local |
+| :--- | :--- | :--- | :--- |
+| **Passo 1** | Compatibilidade de Hardware (`Vlv0100.cs`) | ✅ Concluído | (Registrado no git) |
+| **Passo 2** | Modelo de Configuração (`Settings.cs`) | ⏳ Pendente | - |
+| **Passo 3** | Delegate `CurrentValue` e Persistência (`BatteryChargeLimit.cs`) | ⏳ Pendente | - |
+| **Passo 4** | Watchdog (60s), Sleep/Wake & Correção OSD Toggle (`Controller.cs`) | ⏳ Pendente | - |
+| **Passo 5** | Compilação de Produção, Deploy e Release | ⏳ Pendente | - |
 
 ---
 
@@ -70,10 +82,11 @@ flowchart TD
 
 ## 4. Plano de Implementação Passo a Passo
 
-### Passo 1: Compatibilidade de Hardware (`CommonHelpers/Vlv0100.cs`)
+### Passo 1: Compatibilidade de Hardware (`CommonHelpers/Vlv0100.cs`) ✅ [CONCLUÍDO]
 * Adicionar na lista de dispositivos suportados:
   * Firmware `0x1100` (OLED com firmware atualizado);
   * Revisão 6 do LCD com a flag `MaxBatteryCharge = true`.
+  * *Implementado e testado com compilação bem-sucedida.*
 
 ### Passo 2: Modelo de Configuração (`PowerControl/Settings.cs`)
 * Criar a propriedade global:
