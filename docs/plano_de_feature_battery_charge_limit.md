@@ -1,7 +1,7 @@
 # Plano de Feature: Limite de Carga de Bateria Persistente e Watchdog em Segundo Plano
 
 **Documento:** RFC / Especificação Técnica  
-**Status:** Em Execução (Passo 1 Concluído)  
+**Status:** Em Execução (Passo 2 Concluído)  
 **Autor:** Tech Lead / Pair Programming  
 **Data:** 20/09/2026  
 **Alvo:** `PowerControl` & `CommonHelpers` (Steam Deck Tools Fork)  
@@ -12,8 +12,8 @@
 
 | Passo | Descrição | Status | Commit Local |
 | :--- | :--- | :--- | :--- |
-| **Passo 1** | Compatibilidade de Hardware (`Vlv0100.cs`) | ✅ Concluído | (Registrado no git) |
-| **Passo 2** | Modelo de Configuração (`Settings.cs`) | ⏳ Pendente | - |
+| **Passo 1** | Compatibilidade de Hardware (`Vlv0100.cs`) | ✅ Concluído | `5e7290f` |
+| **Passo 2** | Modelo de Configuração (`Settings.cs`) | ✅ Concluído | (Registrado no git) |
 | **Passo 3** | Delegate `CurrentValue` e Persistência (`BatteryChargeLimit.cs`) | ⏳ Pendente | - |
 | **Passo 4** | Watchdog (60s), Sleep/Wake & Correção OSD Toggle (`Controller.cs`) | ⏳ Pendente | - |
 | **Passo 5** | Compilação de Produção, Deploy e Release | ⏳ Pendente | - |
@@ -88,7 +88,7 @@ flowchart TD
   * Revisão 6 do LCD com a flag `MaxBatteryCharge = true`.
   * *Implementado e testado com compilação bem-sucedida.*
 
-### Passo 2: Modelo de Configuração (`PowerControl/Settings.cs`)
+### Passo 2: Modelo de Configuração (`PowerControl/Settings.cs`) ✅ [CONCLUÍDO]
 * Criar a propriedade global:
   ```csharp
   public string BatteryChargeLimit
@@ -97,6 +97,7 @@ flowchart TD
       set { Set("BatteryChargeLimit", value); }
   }
   ```
+* *Implementado e testado com compilação bem-sucedida.*
 
 ### Passo 3: Delegate `CurrentValue` e Persistência (`PowerControl/Options/BatteryChargeLimit.cs`)
 * Implementar o delegate `CurrentValue` chamando `vlv0100.GetMaxBatteryCharge() + "%"`.

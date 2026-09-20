@@ -53,6 +53,12 @@ namespace PowerControl
             set { Set("EnableVolumeControls", value); }
         }
 
+        public string BatteryChargeLimit
+        {
+            get { return Get("BatteryChargeLimit", "100%"); }
+            set { Set("BatteryChargeLimit", value); }
+        }
+
         public bool EnableExperimentalFeatures
         {
             get { return Instance.IsDEBUG; }
